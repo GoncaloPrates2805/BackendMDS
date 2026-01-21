@@ -38,4 +38,90 @@ public class Participante extends Utilizador {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public List<Inscricao> getInscricoes() {
+        return inscricoes;
+    }
+    public void setInscricoes(List<Inscricao> inscricoes) {
+        this.inscricoes = inscricoes;
+    }
+    public String toString() {
+        return "Participante{" +
+                "nome='" + getNome() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", inscricoes=" + inscricoes +
+                '}';
+    }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Participante that = (Participante) o;
+        return getEmail().equals(that.getEmail());
+    }
+    public int hashCode() {
+        return getEmail().hashCode();
+    }
+    public Participante clone() {
+        return new Participante(this.getNome(), this.getEmail(), this.getPassword(), this.tipo);
+    }
+    public String getInfoParticipante() {
+        return "Nome: " + getNome() + ", Email: " + getEmail() + ", Tipo: " + tipo;
+    }
+    public String getInfoCompleta() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getInfoParticipante()).append("\nInscrições:\n");
+        for (Inscricao inscricao : inscricoes) {
+            sb.append(inscricao.toString()).append("\n");
+        }
+        return sb.toString();
+    }
+    public void adicionarInscricao(Inscricao inscricao) {
+        this.inscricoes.add(inscricao);
+    }
+    public void removerInscricao(Inscricao inscricao) {
+        this.inscricoes.remove(inscricao);
+    }
+    public int contarInscricoes() {
+        return this.inscricoes.size();
+    }
+    public boolean estaInscrito(Evento evento) {
+        for (Inscricao inscricao : inscricoes) {
+            if (inscricao.getEvento().equals(evento)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public List<Evento> listarEventosInscritos() {
+        List<Evento> eventos = new ArrayList<>();
+        for (Inscricao inscricao : inscricoes) {
+            eventos.add(inscricao.getEvento());
+        }
+        return eventos;
+    }
+    public double calcularTotalPago() {
+        double total = 0.0;
+        for (Inscricao inscricao : inscricoes) {
+            if (inscricao.getPagamento() != null) {
+                total += inscricao.getPagamento().getValorPago();
+            }
+        }
+        return total;
+    }
+    public void cancelarInscricao(Inscricao inscricao) {
+        this.inscricoes.remove(inscricao);
+        System.out.println("Inscrição cancelada: " + inscricao.getIdInscricao());
+    }
+    public void atualizarTipo(String novoTipo) {
+        this.tipo = novoTipo;
+        System.out.println("Tipo de participante atualizado para: " + novoTipo);
+    }
+    public void limparInscricoes() {
+        this.inscricoes.clear();
+        System.out.println("Todas as inscrições foram removidas.");
+    }
+    public boolean possuiInscricoes() {
+        return !this.inscricoes.isEmpty();
+    }
 }
